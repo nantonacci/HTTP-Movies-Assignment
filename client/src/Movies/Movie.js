@@ -1,6 +1,7 @@
-import React from "react";
-import axios from "axios";
-import MovieCard from "./MovieCard";
+import React from 'react';
+import axios from 'axios';
+import MovieCard from './MovieCard';
+
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +9,18 @@ export default class Movie extends React.Component {
       movie: null
     };
   }
+
+  deleteMovie = e => {
+    e.preventDefault();
+    axios
+      .delete(``)
+      .then(res => {
+        this.props.updateMovies(res.data);
+        this.props.history.push('/movie-list');
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
   componentDidMount() {
     this.fetchMovie(this.props.match.params.id);
@@ -42,6 +55,14 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
+        <button
+          onClick={() =>
+            this.props.history.push(`/update-movie/${this.state.movie.id}`)
+          }
+        >
+          Update movie
+        </button>
+        <button onClick={this.deleteMovie}>Delete Movie</button>
       </div>
     );
   }

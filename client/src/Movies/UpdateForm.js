@@ -91,3 +91,5 @@ const UpdateForm = props => {
     </>
   );
 };
+
+export default UpdateForm;
