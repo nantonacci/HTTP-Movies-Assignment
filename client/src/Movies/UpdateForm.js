@@ -1,37 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// const initialMovie = {
-//   //id: 5,
-//   title: '',
-//   director: '',
-//   metascore: '',
-//   stars: []
-// };
+const initialMovie = {
+  id: '',
+  title: '',
+  director: '',
+  metascore: '',
+  stars: []
+};
 
 const UpdateForm = props => {
-  const [movie, setMovie] = useState(props.movie);
+  const [movie, setMovie] = useState(initialMovie);
+
   console.log('Update form props: ', props);
 
   const { match, movies } = props;
 
   useEffect(() => {
     const movieID = match.params.id;
-    const movieToUpdate = movies.find(film => {
-      console.log(`${film.id}`, movieID);
-      return `${film.id}` === movieID;
-    });
-    console.log('movieToUpdate: ', movieToUpdate);
-    if (movieToUpdate) {
-      setMovie(movieToUpdate);
-    }
-  }, [match, movies]);
+
+    axios
+      .get(`http://localhost:5000/api/movies/${movieID}`)
+      .then(res => {
+        console.log(res.data);
+        setMovie(res.data);
+      })
+      .catch(err => console.log(err));
+    // const movieToUpdate = movies.find(film => {
+    //   console.log(`${film.id}`, movieID);
+    //   return `${film.id}` === movieID;
+    // });
+
+    // console.log('movieToUpdate: ', movieToUpdate);
+
+    // if (movieToUpdate) {
+    //   setMovie(movieToUpdate);
+    // }
+  }, []);
 
   const changeHandler = e => {
     e.persist();
     let value = e.target.value;
     if (e.target.name === 'stars') {
-      value.split(',');
+      setMovie({
+        ...movie,
+        [e.target.name]: value.split(',')
+      });
     }
 
     setMovie({
@@ -45,8 +59,7 @@ const UpdateForm = props => {
     axios
       .put(`http://localhost:5000/api/movies/${movie.id}`, movie)
       .then(res => {
-        props.updateMovies(res.data);
-        props.history.push(`/movie-list/${movie.id}`);
+        props.history.push(`/movies/${movie.id}`);
         console.log(res);
       })
       .catch(err => console.log(err));
@@ -87,6 +100,7 @@ const UpdateForm = props => {
           placeholder="Movie stars, separated by a comma"
           value={movie.stars}
         />
+        <button type="submit">Update</button>
       </form>
     </>
   );

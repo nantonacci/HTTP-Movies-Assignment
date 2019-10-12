@@ -64,13 +64,6 @@ export default class Movie extends React.Component {
           Update movie
         </button>
         <button onClick={this.deleteMovie}>Delete Movie</button>
-        {/* vvv update this vvv */}
-        <Route
-          path="/update-movie/:id"
-          render={props => {
-            return <UpdateForm {...props} movie={this.state.move} />;
-          }}
-        />
       </div>
     );
   }
