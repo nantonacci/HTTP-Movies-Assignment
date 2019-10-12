@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const initialMovie = {
-  //id: 5,
-  title: '',
-  director: '',
-  metascore: '',
-  stars: []
-};
+// const initialMovie = {
+//   //id: 5,
+//   title: '',
+//   director: '',
+//   metascore: '',
+//   stars: []
+// };
 
 const UpdateForm = props => {
-  const [movie, setMovie] = useState(initialMovie);
+  const [movie, setMovie] = useState(props.movie);
   console.log('Update form props: ', props);
 
   const { match, movies } = props;

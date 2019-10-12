@@ -1,6 +1,8 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import axios from 'axios';
 import MovieCard from './MovieCard';
+import UpdateForm from './UpdateForm.js';
 
 export default class Movie extends React.Component {
   constructor(props) {
@@ -13,10 +15,9 @@ export default class Movie extends React.Component {
   deleteMovie = e => {
     e.preventDefault();
     axios
-      .delete(``)
+      .delete(`http://localhost:5000/api/movies/${this.state.movie.id}`)
       .then(res => {
-        this.props.updateMovies(res.data);
-        this.props.history.push('/movie-list');
+        this.props.history.push('/');
         console.log(res);
       })
       .catch(err => console.log(err));
@@ -26,7 +27,7 @@ export default class Movie extends React.Component {
     this.fetchMovie(this.props.match.params.id);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(newProps) {
     if (this.props.match.params.id !== newProps.match.params.id) {
       this.fetchMovie(newProps.match.params.id);
     }
@@ -63,6 +64,13 @@ export default class Movie extends React.Component {
           Update movie
         </button>
         <button onClick={this.deleteMovie}>Delete Movie</button>
+        {/* vvv update this vvv */}
+        <Route
+          path="/update-movie/:id"
+          render={props => {
+            return <UpdateForm {...props} movie={this.state.move} />;
+          }}
+        />
       </div>
     );
   }
